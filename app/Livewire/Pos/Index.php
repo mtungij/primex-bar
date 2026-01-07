@@ -38,7 +38,7 @@ class Index extends Component
     $setting = Setting::first();
     $this->useDiscount = $setting ? $setting->use_discount : true;
 
-    $this->products = Product::where('is_active', true)->get();
+    $this->loadProducts();
 }
 
 
@@ -158,47 +158,66 @@ protected function loadProducts()
 
 public function checkout()
 {
-    if (empty($this->cart)) return;
+    if (empty($this->cart)) {
+        session()->flash('error', 'Cart is empty');
+        return;
+    }
 
-    DB::transaction(function () {
-        foreach ($this->cart as $productId => $item) {
-            $product = Product::findOrFail($productId);
-            if ($item['qty'] > $product->current_stock) {
-                throw new \Exception("Stock ya {$product->name} haitoshi");
+    try {
+        DB::transaction(function () {
+            // Validate stock for all items first
+            foreach ($this->cart as $productId => $item) {
+                $product = Product::findOrFail($productId);
+                if ($item['qty'] > $product->current_stock) {
+                    throw new \Exception("Stock ya {$product->name} haitoshi");
+                }
             }
-        }
 
-        $sale = Sale::create([
-            'user_id' => Auth::id(),
-            'total_amount' => $this->cartTotal,
-            'payment_method' => $this->paymentMethod,
-            'discount' => $this->useDiscount ? $item['discount'] ?? 0 : 0,
-            'discount_type' => $this->useDiscount ? $item['discount_type'] ?? null : null,
-        ]);
+            // Calculate total discount
+            $totalDiscount = 0;
+            if ($this->useDiscount) {
+                foreach ($this->cart as $item) {
+                    $totalDiscount += $item['discount'] ?? 0;
+                }
+            }
 
-        foreach ($this->cart as $productId => $item) {
-            SaleItem::create([
-                'sale_id' => $sale->id,
-                'product_id' => $productId,
-                'qty' => $item['qty'],
-                'price' => $item['price'],
-                'discount' => $item['discount'] ?? 0,
-            ]);
-
-            StockMovement::create([
-                'product_id' => $productId,
-                'qty' => $item['qty'],
-                'type' => 'out',
-                'reason' => 'sale',
+            // Create sale
+            $sale = Sale::create([
                 'user_id' => Auth::id(),
+                'total_amount' => $this->cartTotal,
+                'payment_method' => $this->paymentMethod,
             ]);
-        }
 
-    });
+            // Create sale items and update stock
+            foreach ($this->cart as $productId => $item) {
+                SaleItem::create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $productId,
+                    'qty' => $item['qty'],
+                    'price' => $item['price'],
+                ]);
 
-    // Reset cart & payment
-    $this->reset(['cart', 'paymentMethod']);
-    session()->flash('success', 'Sale completed successfully');
+                StockMovement::create([
+                    'product_id' => $productId,
+                    'qty' => $item['qty'],
+                    'type' => 'out',
+                    'reason' => 'sale',
+                    'user_id' => Auth::id(),
+                ]);
+            }
+
+            $this->lastSale = $sale;
+        });
+
+        // Reset cart & payment after successful transaction
+        $this->cart = [];
+        $this->paymentMethod = 'cash';
+        
+        session()->flash('success', 'Sale completed successfully!');
+        
+    } catch (\Exception $e) {
+        session()->flash('error', $e->getMessage());
+    }
 }
 
 

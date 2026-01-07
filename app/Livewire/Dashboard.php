@@ -23,6 +23,8 @@ class Dashboard extends Component
     public $categoryLabels;
     public $categorySales;
 
+
+
     public function mount()
     {
         $this->loadDashboardData();
@@ -59,8 +61,11 @@ class Dashboard extends Component
             ->whereDate('sales.created_at', today())
             ->sum('sale_items.qty');
 
+
         // Remaining stock (total current stock quantity)
-        $this->remainingStock = Product::sum('stock_qty');
+        $this->remainingStock = SaleItem::sum('qty');
+// dd($this->remainingStock);
+       
 
         // Top 5 selling products today
         $this->topSellingProducts = SaleItem::join('sales', 'sales.id', '=', 'sale_items.sale_id')

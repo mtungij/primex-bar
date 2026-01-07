@@ -75,10 +75,7 @@
                     <span class="text-gray-600 dark:text-gray-400">Sold Today Total</span>
                     <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ number_format($soldToday) }}</span>
                 </li>
-                <li class="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
-                    <span class="font-semibold text-gray-900 dark:text-white">Total Stock Quantity</span>
-                    <span class="font-bold text-cyan-600 dark:text-cyan-400">{{ number_format($remainingStock) }}</span>
-                </li>
+               
             </ul>
         </div>
 
