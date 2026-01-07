@@ -1,24 +1,32 @@
 <div class="p-6">
-    <flux:card class="space-y-6">
+    <div class="space-y-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
         {{-- Header --}}
         <div class="flex items-center justify-between">
             <div>
-                <flux:heading size="lg">Daily Stock Report</flux:heading>
-                <flux:subheading>Complete inventory movement and profit analysis</flux:subheading>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Daily Stock Report</h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Complete inventory movement and profit analysis</p>
             </div>
             <div class="flex gap-3">
-                <flux:input 
-                    type="date" 
-                    wire:model.live="reportDate" 
-                    label="Report Date"
-                />
-                <flux:button wire:click="exportPdf" variant="primary" icon="arrow-down-tray">
-                    Export PDF
-                </flux:button>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Report Date</label>
+                    <input 
+                        type="date" 
+                        wire:model.live="reportDate"
+                        class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                </div>
+                <div class="flex items-end">
+                    <button wire:click="exportPdf" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Export PDF
+                    </button>
+                </div>
             </div>
         </div>
 
-        <flux:separator />
+        <hr class="border-gray-200 dark:border-gray-700" />
 
         {{-- Summary Cards --}}
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
@@ -54,62 +62,62 @@
 
         {{-- Data Table --}}
         <div class="overflow-x-auto">
-            <flux:table>
-                <flux:columns>
-                    <flux:column class="w-16">S/N</flux:column>
-                    <flux:column>Product Name</flux:column>
-                    <flux:column>Category</flux:column>
-                    <flux:column class="text-right">Opening Stock</flux:column>
-                    <flux:column class="text-right">Added Stock</flux:column>
-                    <flux:column class="text-right">Buy Price</flux:column>
-                    <flux:column class="text-right">Sell Price</flux:column>
-                    <flux:column class="text-right">Sold Today</flux:column>
-                    <flux:column class="text-right">Closing Stock</flux:column>
-                    <flux:column class="text-right">Buy Value</flux:column>
-                    <flux:column class="text-right">Sell Value</flux:column>
-                    <flux:column class="text-right">Profit</flux:column>
-                </flux:columns>
-
-                <flux:rows>
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                    <tr>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-16">S/N</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Product Name</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Opening Stock</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Added Stock</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Buy Price</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sell Price</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sold Today</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Closing Stock</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Buy Value</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sell Value</th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Profit</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($reportData as $row)
-                        <flux:row>
-                            <flux:cell class="font-mono text-sm">{{ $row['sn'] }}</flux:cell>
-                            <flux:cell class="font-medium">{{ $row['product_name'] }}</flux:cell>
-                            <flux:cell>
-                                <flux:badge size="sm" color="zinc">{{ $row['category'] }}</flux:badge>
-                            </flux:cell>
-                            <flux:cell class="text-right font-mono">{{ number_format($row['opening_stock']) }}</flux:cell>
-                            <flux:cell class="text-right font-mono text-green-600 dark:text-green-400">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-3 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100">{{ $row['sn'] }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ $row['product_name'] }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                    {{ $row['category'] }}
+                                </span>
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-gray-900 dark:text-gray-100">{{ number_format($row['opening_stock']) }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-green-600 dark:text-green-400">
                                 {{ $row['added_stock'] > 0 ? '+' . number_format($row['added_stock']) : '-' }}
-                            </flux:cell>
-                            <flux:cell class="text-right font-mono">{{ number_format($row['buy_price'], 0) }}</flux:cell>
-                            <flux:cell class="text-right font-mono">{{ number_format($row['sell_price'], 0) }}</flux:cell>
-                            <flux:cell class="text-right font-mono text-red-600 dark:text-red-400">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-gray-900 dark:text-gray-100">{{ number_format($row['buy_price'], 0) }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-gray-900 dark:text-gray-100">{{ number_format($row['sell_price'], 0) }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-red-600 dark:text-red-400">
                                 {{ $row['sold_today'] > 0 ? '-' . number_format($row['sold_today']) : '-' }}
-                            </flux:cell>
-                            <flux:cell class="text-right font-mono">{{ number_format($row['closing_stock']) }}</flux:cell>
-                            <flux:cell class="text-right font-mono">{{ number_format($row['buy_value'], 0) }}</flux:cell>
-                            <flux:cell class="text-right font-mono">{{ number_format($row['sell_value'], 0) }}</flux:cell>
-                            <flux:cell class="text-right font-mono">
-                                <span class="@if($row['profit'] > 0) text-emerald-600 dark:text-emerald-400 @elseif($row['profit'] < 0) text-red-600 dark:text-red-400 @endif font-semibold">
+                            </td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-gray-900 dark:text-gray-100">{{ number_format($row['closing_stock']) }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-gray-900 dark:text-gray-100">{{ number_format($row['buy_value'], 0) }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono text-gray-900 dark:text-gray-100">{{ number_format($row['sell_value'], 0) }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-right font-mono">
+                                <span class="@if($row['profit'] > 0) text-emerald-600 dark:text-emerald-400 @elseif($row['profit'] < 0) text-red-600 dark:text-red-400 @else text-gray-900 dark:text-gray-100 @endif font-semibold">
                                     {{ number_format($row['profit'], 0) }}
                                 </span>
-                            </flux:cell>
-                        </flux:row>
+                            </td>
+                        </tr>
                     @empty
-                        <flux:row>
-                            <flux:cell colspan="12" class="text-center py-8 text-gray-500">
+                        <tr>
+                            <td colspan="12" class="px-3 py-8 text-center text-gray-500 dark:text-gray-400">
                                 No products found
-                            </flux:cell>
-                        </flux:row>
+                            </td>
+                        </tr>
                     @endforelse
-                </flux:rows>
-            </flux:table>
-        </div>
-
-        {{-- Footer Totals --}}
-        <div class="border-t pt-4">
-            <div class="flex justify-end gap-8 text-sm font-semibold">
+                </tbody>
+            </table>
+        </div>border-gray-200 dark:border-gray-700 pt-4">
+            <div class="flex justify-end gap-8 text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <div>Total Opening: <span class="text-blue-600">{{ number_format($totals['opening_stock']) }}</span></div>
                 <div>Total Added: <span class="text-green-600">{{ number_format($totals['added_stock']) }}</span></div>
                 <div>Total Sold: <span class="text-red-600">{{ number_format($totals['sold_qty']) }}</span></div>
@@ -117,5 +125,8 @@
                 <div>Total Profit: <span class="text-emerald-600">{{ number_format($totals['profit'], 0) }}</span></div>
             </div>
         </div>
+
+            </div>
+        
     </flux:card>
 </div>

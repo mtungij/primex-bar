@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('login'));
 })->name('home');
-
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/pos', Index::class)->name('pos.index');
