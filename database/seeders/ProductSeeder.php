@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
             'buy_price' => 1800,
             'sell_price' => 2500,
             'stock_qty' => 0,
-            'unit' => 'bottle',
+           
         ]);
 
         Product::create([
@@ -31,7 +31,7 @@ class ProductSeeder extends Seeder
             'buy_price' => 1700,
             'sell_price' => 2400,
             'stock_qty' => 0,
-            'unit' => 'bottle',
+            
         ]);
 
         // Spirits
@@ -41,7 +41,7 @@ class ProductSeeder extends Seeder
             'buy_price' => 2000,
             'sell_price' => 4000,
             'stock_qty' => 0,
-            'unit' => 'shot',
+           
         ]);
 
         // Soft drinks
@@ -51,7 +51,7 @@ class ProductSeeder extends Seeder
             'buy_price' => 500,
             'sell_price' => 1000,
             'stock_qty' => 0,
-            'unit' => 'bottle',
+          
         ]);
 
         // Energy drink
@@ -61,7 +61,7 @@ class ProductSeeder extends Seeder
             'buy_price' => 3000,
             'sell_price' => 4500,
             'stock_qty' => 0,
-            'unit' => 'can',
+          
         ]);
     }
 }
