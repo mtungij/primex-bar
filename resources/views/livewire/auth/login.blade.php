@@ -3,8 +3,7 @@
 
 <x-layouts.auth>
    
-
-        <div class="bg-white/80 backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div class="bg-white dark:bg-gray-800 backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md">
             <x-auth-header
                 :title="__('BAR SYSTEM LOGIN')"
                 :description="__('Enter your email and password below to log in')" />
@@ -15,23 +14,12 @@
             @csrf
 
             <!-- Email Address -->
- <flux:input
-    name="email"
-    :label="__('Email address')"
-    type="email"
-    placeholder="email@example.com"
-    class:input="
-        text-white
-        placeholder:text-white/70
-      
-        border-white/30
-        focus:border-white
-        focus:ring-white
-    "
-    label-class="text-white"
-/>
-
-
+            <flux:input
+                name="email"
+                :label="__('Email address')"
+                type="email"
+                placeholder="email@example.com"
+            />
 
             <!-- Password -->
             <div class="relative">
@@ -68,17 +56,15 @@
                 <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
             </div>
         @endif --}}
-<div class="text-center mt-4">
-      <a
-        href="https://wa.me/255629364847"
-        target="_blank"
-        class="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
-    >
-       
-
-        <span>Unahitaji msaada? Bonyeza hapa WhatsApp</span>
-    </a>
-</div>
+        <div class="text-center mt-4">
+            <a
+                href="https://wa.me/255629364847"
+                target="_blank"
+                class="inline-flex items-center gap-2 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-medium transition-colors"
+            >
+                <span>Unahitaji msaada? Bonyeza hapa WhatsApp</span>
+            </a>
+        </div>
 
         </div>
 
