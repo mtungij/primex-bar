@@ -1,0 +1,11 @@
+docker run -it -d \
+  --label traefik.http.routers.primebar.rule=Host\(\`primebar.online\`\) \
+  --label traefik.http.routers.primebar.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.primebar.tls=true \
+  --label traefik.http.routers.primebar.service=primebar-credit-http \
+  --label traefik.http.services.primebar-credit-http.loadbalancer.server.port=80 \
+  --name primebar \
+  --network web \
+  --restart always \
+  --expose 80 \
+  ubuntu:latest
