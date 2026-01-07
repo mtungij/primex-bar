@@ -67,7 +67,7 @@ Route::get('/reports/my-daily-sales', \App\Livewire\Reports\DailyMySales::class)
     ->name('products.stock-report')
     ->middleware('auth');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', \App\Livewire\Dashboard::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
